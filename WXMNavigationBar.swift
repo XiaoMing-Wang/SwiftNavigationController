@@ -10,14 +10,14 @@ import UIKit
 
 class WXMNavigationBar: UINavigationBar {
        
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         self.subviews.first?.addSubview(self.fakeView)
         self.subviews.first?.insertSubview(backgroundImageView, aboveSubview: fakeView)
         self.subviews.first?.insertSubview(shadowImageView, aboveSubview: backgroundImageView)
-        
+
         let top = (self.shadowImageView.superview?.bounds.size.height ?? 0.5) - 0.5
         let width = self.shadowImageView.superview?.bounds.size.width ?? 0
         UIView.setAnimationsEnabled(false)
@@ -37,7 +37,7 @@ class WXMNavigationBar: UINavigationBar {
     public func hidenFakeView() {
         self.fakeView.alpha = 0
     }
-        
+
     public lazy var fakeView: UIVisualEffectView = {
         let effect = UIBlurEffect.init(style: .light)
         var fakeView = UIVisualEffectView.init(effect: effect)
@@ -54,7 +54,7 @@ class WXMNavigationBar: UINavigationBar {
         backgroundImageView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
         return backgroundImageView
     }()
-    
+
     public lazy var shadowImageView: UIImageView = {
         var shadowImageView = UIImageView.init()
         shadowImageView.isUserInteractionEnabled = false

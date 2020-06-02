@@ -8,25 +8,25 @@
 
 import UIKit
 
-class WXMNavigationControllerDelegate: UIScreenEdgePanGestureRecognizer, UINavigationControllerDelegate, UIGestureRecognizerDelegate  {
-    
-    var proxiedDelegate : UINavigationControllerDelegate!
-    var navigation : WXMNavigationViewController!
+class WXMNavigationControllerDelegate: UIScreenEdgePanGestureRecognizer, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
 
-    init(navigation : WXMNavigationViewController) {
+    var proxiedDelegate: UINavigationControllerDelegate!
+    var navigation: WXMNavigationViewController!
+
+    init(navigation: WXMNavigationViewController) {
         super.init(target: nil, action: nil)
         self.navigation = navigation
         self.navigation.interactivePopGestureRecognizer?.delegate = self
         self.navigation.interactivePopGestureRecognizer?.isEnabled = false
         self.isEnabled = false
     }
-    
+
     /// 即将出现
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        
-        let coordinator:UIViewControllerTransitionCoordinator? = navigationController.transitionCoordinator
+
+        let coordinator: UIViewControllerTransitionCoordinator? = navigationController.transitionCoordinator
         self.navigation.transitional = true
-        
+
         if coordinator != nil {
             showController(viewController: viewController, coordinator: coordinator!)
         } else {
@@ -34,10 +34,10 @@ class WXMNavigationControllerDelegate: UIScreenEdgePanGestureRecognizer, UINavig
             self.navigation.updateNavigationBarForViewController(viewController: viewController)
         }
     }
-    
+
     /// 完成出现
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-                
+
         self.navigation.transitional = false
         self.navigation.poppingViewController = nil
         self.navigation.updateNavigationBarForViewController(viewController: viewController)
@@ -47,21 +47,21 @@ class WXMNavigationControllerDelegate: UIScreenEdgePanGestureRecognizer, UINavig
             navigationController.interactivePopGestureRecognizer?.isEnabled = false
         }
     }
-    
+
     /// 设置导航栏颜色并且设置透明度为0
-    func showController(viewController:UIViewController, coordinator: UIViewControllerTransitionCoordinator) {
+    func showController(viewController: UIViewController, coordinator: UIViewControllerTransitionCoordinator) {
         let from = coordinator.viewController(forKey: .from)
         let to = coordinator.viewController(forKey: .to)
-        
+
         if from == nil || to == nil { return }
         coordinator.animate(alongsideTransition: { (context) in
-            
+
             self.navigation.updateNavigationBarForViewController(viewController: viewController)
             let shouldFake = shouldShowFake(viewController, from!, to!)
             if shouldFake { self.navigation.showFakeBar(from!, to!) }
-                       
+
         }) { (coordinatorContext) in
-            
+
             self.navigation.clearFake()
             self.navigation.transitional = false
             self.navigation.poppingViewController = nil;
