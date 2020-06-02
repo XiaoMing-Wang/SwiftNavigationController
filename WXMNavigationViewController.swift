@@ -77,7 +77,9 @@ class WXMNavigationViewController: UINavigationController {
     
     ///  设置导航栏为顶部的vc的属性
     func updateNavigationBarAnimatedForViewController(viewController:UIViewController) {
-        self.navigationbar().uptebarColor(color: viewController.barColor ?? UIColor.white)
+        if viewController.barColor != nil {
+            self.navigationbar().uptebarColor(color: viewController.barColor!)
+        }
     }
         
     /// 转场动画完成结束
