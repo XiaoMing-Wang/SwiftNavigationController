@@ -1,5 +1,5 @@
 //
-//  WXMNavigationViewController.swift
+//  FXNavigationViewController.swift
 //  IM_Client_Swift
 //
 //  Created by wq on 2020/5/30.
@@ -8,60 +8,69 @@
 
 import UIKit
 
-fileprivate var barTinFont:UIFont = UIFont.systemFont(ofSize: 17)
-fileprivate var barTinColor:UIColor = UIColor.black
-class WXMNavigationViewController: UINavigationController {
+fileprivate var barTinFont: UIFont = .boldSystemFont(ofSize: 17)
+fileprivate var barTinColor: UIColor = .black
+class FXWrapNavigationViewController: UINavigationController {
 
-    weak var poppingViewController:UIViewController?
-    var transitional:Bool = false
-    var navigationDelegate:WXMNavigationControllerDelegate?
-     
-    override init(rootViewController: UIViewController) {
-        super.init(navigationBarClass: WXMNavigationBar.self, toolbarClass: nil)
+    weak var poppingViewController: UIViewController?
+    var transitional: Bool = false
+    var navigationDelegate: FXWrapNavigationControllerDelegate?
+
+    override required init(rootViewController: UIViewController) {
+        super.init(navigationBarClass: FXNavigationBar.self, toolbarClass: nil)
         self.viewControllers = [rootViewController]
     }
-    
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+      
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.navigationBar.isTranslucent = true
-        self.navigationBar.setBackgroundImage(UIImage.init(), for: .default)
-        self.navigationBar.shadowImage = UIImage.init()
-        self.navigationDelegate = WXMNavigationControllerDelegate.init(navigation: self)
+        self.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationBar.shadowImage = UIImage()
+        self.navigationDelegate = FXWrapNavigationControllerDelegate(navigation: self)
         
-        /** 转场动画用 */
+        /** 原来的代理 */
         self.navigationDelegate?.proxiedDelegate = self.delegate
-        self.delegate = self.navigationDelegate;
+        self.delegate = self.navigationDelegate
     }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        let coordinator:UIViewControllerTransitionCoordinator? = self.transitionCoordinator
+        let coordinator: UIViewControllerTransitionCoordinator? = self.transitionCoordinator
         if (coordinator != nil) {
             self.updateNavigationBarForViewController(viewController: self.topViewController!)
         }
     }
-    
+
     override func popViewController(animated: Bool) -> UIViewController? {
         self.poppingViewController = self.topViewController
         return super.popViewController(animated: animated)
     }
-    
+
     override func popToViewController(_ viewController: UIViewController, animated: Bool) -> [UIViewController]? {
         self.poppingViewController = self.topViewController
         return super.popToViewController(viewController, animated: animated)
     }
-    
+
+    @discardableResult
     override func popToRootViewController(animated: Bool) -> [UIViewController]? {
         self.poppingViewController = self.topViewController
         return super.popToRootViewController(animated: animated)
     }
     
-    public func updateNavigationBarForViewController(viewController:UIViewController) {
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        super.pushViewController(viewController, animated: animated)
+    }
+
+    public func updateNavigationBarForViewController(viewController: UIViewController) {
         self.updateNavigationBarColorOrImageForViewController(viewController: viewController)
         self.updateNavigationBarAnimatedForViewController(viewController: viewController)
     }
@@ -77,14 +86,19 @@ class WXMNavigationViewController: UINavigationController {
 
     ///  设置导航栏为顶部的vc的属性
     func updateNavigationBarAnimatedForViewController(viewController: UIViewController) {
-        if viewController.barColor != nil {
+        if viewController.barHidden {
+            self.navigationbar().hidenFakeView()
+        } else if !viewController.barHidden && viewController.barColor != nil {
             self.navigationbar().uptebarColor(color: viewController.barColor!)
         }
     }
-        
+
     /// 转场动画完成结束
     public func updateNavigationFinash(viewController: UIViewController) {
-        if viewController.barHidden { self.navigationbar().hidenFakeView() }
+        if viewController.barHidden {
+            self.navigationbar().hidenFakeView()
+        }
+        
         if self.viewControllers.count == 1 {
             self.interactivePopGestureRecognizer?.isEnabled = false
         }
@@ -124,43 +138,43 @@ class WXMNavigationViewController: UINavigationController {
     }
 
     public lazy var fromFakeImageView: UIImageView? = {
-        var fromFakeImageView = UIImageView.init()
+        var fromFakeImageView = UIImageView()
         return fromFakeImageView
     }()
 
     public lazy var toFakeImageView: UIImageView? = {
-        var toFakeImageView = UIImageView.init()
+        var toFakeImageView = UIImageView()
         return toFakeImageView
     }()
 
     public lazy var fromFakeShadow: UIImageView? = {
-        var fromFakeShadow = UIImageView.init()
+        var fromFakeShadow = UIImageView()
         fromFakeShadow.image = self.navigationbar().shadowImageView.image
         fromFakeShadow.backgroundColor = self.navigationbar().shadowImageView.backgroundColor
         return fromFakeShadow
     }()
 
     public lazy var toFakeShadow: UIImageView? = {
-        var toFakeShadow = UIImageView.init()
+        var toFakeShadow = UIImageView()
         toFakeShadow.image = self.navigationbar().shadowImageView.image
         toFakeShadow.backgroundColor = self.navigationbar().shadowImageView.backgroundColor
         return toFakeShadow
     }()
 
-    func fakeBarFrameForViewController(controller:UIViewController) ->CGRect {
-        guard let back = self.navigationbar().subviews.first else { return CGRect.zero }
+    func fakeBarFrameForViewController(controller: UIViewController) -> CGRect {
+        guard let back = self.navigationbar().subviews.first else { return .zero }
         var frame = self.navigationbar().convert(back.frame, from: controller.view)
-        frame.origin = CGPoint.zero
+        frame.origin = .zero
         return frame
     }
 
     func fakeShadowFrameWithBarFrame(frame: CGRect) -> CGRect {
         let y = frame.size.height + frame.origin.y - 0.5
-        return CGRect.init(x: frame.origin.x, y: y, width: frame.size.width, height: 0.5);
+        return CGRect(x: frame.origin.x, y: y, width: frame.size.width, height: 0.5);
     }
 
-    func navigationbar() -> WXMNavigationBar {
-        return self.navigationBar as! WXMNavigationBar
+    func navigationbar() -> FXNavigationBar {
+        return self.navigationBar as! FXNavigationBar
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  WXMNavigationControllerDelegate.swift
+//  FXWrapNavigationControllerDelegate.swift
 //  IM_Client_Swift
 //
 //  Created by wq on 2020/5/30.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-class WXMNavigationControllerDelegate: UIScreenEdgePanGestureRecognizer, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
+class FXWrapNavigationControllerDelegate: UIScreenEdgePanGestureRecognizer, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
 
-    var proxiedDelegate: UINavigationControllerDelegate!
-    var navigation: WXMNavigationViewController!
+    var proxiedDelegate: UINavigationControllerDelegate? = nil
+    weak var navigation: FXWrapNavigationViewController!
 
-    init(navigation: WXMNavigationViewController) {
+    init(navigation: FXWrapNavigationViewController) {
         super.init(target: nil, action: nil)
         self.navigation = navigation
         self.navigation.interactivePopGestureRecognizer?.delegate = self
@@ -37,7 +37,6 @@ class WXMNavigationControllerDelegate: UIScreenEdgePanGestureRecognizer, UINavig
 
     /// 完成出现
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-
         self.navigation.transitional = false
         self.navigation.poppingViewController = nil
         self.navigation.updateNavigationBarForViewController(viewController: viewController)
@@ -72,9 +71,8 @@ class WXMNavigationControllerDelegate: UIScreenEdgePanGestureRecognizer, UINavig
                 self.navigation.updateNavigationBarForViewController(viewController: viewController)
                 self.navigation.updateNavigationFinash(viewController: viewController)
             }
-            
         }
     }
-    
+
 }
 
