@@ -1,5 +1,5 @@
 //
-//  FXWrapNavigationControllerDelegate.swift
+//  WDWrapNavigationControllerDelegate.swift
 //  IM_Client_Swift
 //
 //  Created by wq on 2020/5/30.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-class FXWrapNavigationControllerDelegate: UIScreenEdgePanGestureRecognizer, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
+class WDWrapNavigationControllerDelegate: UIScreenEdgePanGestureRecognizer, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
 
     var proxiedDelegate: UINavigationControllerDelegate? = nil
-    weak var navigation: FXWrapNavigationViewController!
+    weak var navigation: WDWrapNavigationViewController!
 
-    init(navigation: FXWrapNavigationViewController) {
+    init(navigation: WDWrapNavigationViewController) {
         super.init(target: nil, action: nil)
         self.navigation = navigation
         self.navigation.interactivePopGestureRecognizer?.delegate = self

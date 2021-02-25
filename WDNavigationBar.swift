@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FXNavigationBar: UINavigationBar {
+class WDNavigationBar: UINavigationBar {
     
     override func layoutSubviews() {
         super.layoutSubviews()

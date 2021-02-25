@@ -1,5 +1,5 @@
 //
-//  FXNavigationViewController.swift
+//  WDNavigationViewController.swift
 //  IM_Client_Swift
 //
 //  Created by wq on 2020/5/30.
@@ -10,14 +10,14 @@ import UIKit
 
 fileprivate var barTinFont: UIFont = .boldSystemFont(ofSize: 17)
 fileprivate var barTinColor: UIColor = .black
-class FXWrapNavigationViewController: UINavigationController {
+class WDWrapNavigationViewController: UINavigationController {
 
     weak var poppingViewController: UIViewController?
     var transitional: Bool = false
-    var navigationDelegate: FXWrapNavigationControllerDelegate?
+    var navigationDelegate: WDWrapNavigationControllerDelegate?
 
     override required init(rootViewController: UIViewController) {
-        super.init(navigationBarClass: FXNavigationBar.self, toolbarClass: nil)
+        super.init(navigationBarClass: WDNavigationBar.self, toolbarClass: nil)
         self.viewControllers = [rootViewController]
     }
 
@@ -35,7 +35,7 @@ class FXWrapNavigationViewController: UINavigationController {
         self.navigationBar.isTranslucent = true
         self.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationBar.shadowImage = UIImage()
-        self.navigationDelegate = FXWrapNavigationControllerDelegate(navigation: self)
+        self.navigationDelegate = WDWrapNavigationControllerDelegate(navigation: self)
         
         /** 原来的代理 */
         self.navigationDelegate?.proxiedDelegate = self.delegate
@@ -173,8 +173,8 @@ class FXWrapNavigationViewController: UINavigationController {
         return CGRect(x: frame.origin.x, y: y, width: frame.size.width, height: 0.5);
     }
 
-    func navigationbar() -> FXNavigationBar {
-        return self.navigationBar as! FXNavigationBar
+    func navigationbar() -> WDNavigationBar {
+        return self.navigationBar as! WDNavigationBar
     }
 }
 
